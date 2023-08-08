@@ -68,7 +68,6 @@
   },
   "scripts": {
     "dev": "taskr",
-    "force-build": "echo 3",
     "release": "taskr release",
     "build": "pnpm release && pnpm types",
     "prepublishOnly": "cd ../../ && turbo run build",
