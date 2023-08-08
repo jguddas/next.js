@@ -1,4 +1,3 @@
-const os = require('os')
 const path = require('path')
 const _glob = require('glob')
 const fs = require('fs-extra')
@@ -21,7 +20,7 @@ const externalTestsFilterLists = process.env.NEXT_EXTERNAL_TESTS_FILTERS
   ? require(process.env.NEXT_EXTERNAL_TESTS_FILTERS)
   : { enabledTests: [] }
 const timings = []
-const DEFAULT_NUM_RETRIES = os.platform() === 'win32' ? 2 : 1
+const DEFAULT_NUM_RETRIES = 2
 const DEFAULT_CONCURRENCY = 2
 const RESULTS_EXT = `.results.json`
 const isTestJob = !!process.env.NEXT_TEST_JOB
