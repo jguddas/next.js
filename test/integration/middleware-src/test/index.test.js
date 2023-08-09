@@ -18,13 +18,11 @@ const appDir = join(__dirname, '../')
 const srcHeader = 'X-From-Src-Middleware'
 const rootHeader = 'X-From-Root-Middleware'
 const rootMiddlewareJSFile = join(appDir, 'middleware.js')
-const rootMiddlewareTSFile = join(appDir, 'middleware.ts')
 
 function runSingleMiddlewareTests() {
   it('loads an runs src middleware', async () => {
     const response = await fetchViaHTTP(appPort, '/post-1')
-    expect(response.headers.has(srcHeader)).toBe(false)
-    expect(response.headers.has(`${srcHeader}-TS`)).toBe(true)
+    expect(response.headers.has(srcHeader)).toBe(true)
   })
 }
 
@@ -32,9 +30,7 @@ function runDoubleMiddlewareTests() {
   it('loads and runs only root middleware', async () => {
     const response = await fetchViaHTTP(appPort, '/post-1')
     expect(response.headers.has(srcHeader)).toBe(false)
-    expect(response.headers.has(`${srcHeader}-TS`)).toBe(false)
-    expect(response.headers.has(rootHeader)).toBe(false)
-    expect(response.headers.has(`${rootHeader}-TS`)).toBe(true)
+    expect(response.headers.has(rootHeader)).toBe(true)
   })
 }
 
@@ -54,22 +50,10 @@ response.headers.set('${rootHeader}', 'true')
 return response
 }`
   )
-  await fs.writeFile(
-    rootMiddlewareTSFile,
-    `
-import { NextResponse } from 'next/server'
-
-export default function () {
-const response = NextResponse.next()
-response.headers.set('${rootHeader}-TS', 'true')
-return response
-}`
-  )
 }
 
 async function removeRootMiddleware() {
   await fs.remove(rootMiddlewareJSFile, { force: true })
-  await fs.remove(rootMiddlewareTSFile, { force: true })
   await fs.remove(join(appDir, 'pages'), { force: true, recursive: true })
 }
 
